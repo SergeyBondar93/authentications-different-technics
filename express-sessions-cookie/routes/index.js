@@ -18,14 +18,14 @@ router.get("/", (_req, res) => {
   res.sendFile(index);
 });
 
-router.post("/api/login", authController.login);
+router.post("/api/auth/login", authController.login);
+router.get("/api/auth/logout", logoutController.logout);
 
 // all routes that come after this middleware are protected
 // and can only be accessed if the user is logged in
 router.use(authenticate);
 
-router.get("/api/profile", profileController.profile);
-router.get("/api/logout", logoutController.logout);
-router.get("/api/switch-role", profileController.switchRole);
+router.get("/api/users/me/switch-role", profileController.switchRole);
+router.get("/api/users/me/profile", profileController.profile);
 
 module.exports = router;

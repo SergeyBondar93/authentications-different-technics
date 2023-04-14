@@ -28,6 +28,13 @@
     const userBlock = document.getElementById("cookie");
     const switchRoleBtn = document.getElementById("switch-role");
 
+    const api = {
+      login: "/api/auth/login",
+      logout: "/api/auth/logout",
+      getProfile: "/api/users/me/profile",
+      switchRole: "/api/users/me/switch-role",
+    };
+
     const adminCreds = {
       email: "user1@productioncoder.com",
       password: "user1pw",
@@ -39,7 +46,7 @@
 
     const handleLogin = (creds) => async () => {
       const body = JSON.stringify(creds);
-      const res = await fetch("/api/login", {
+      const res = await fetch(api.login, {
         method: "POST",
         body,
         headers: { "Content-Type": "application/json" },
@@ -50,7 +57,7 @@
 
     const handleGetProfile = async () => {
       try {
-        const res = await fetch("/api/profile");
+        const res = await fetch(api.getProfile);
         const { cookie, user } = await res.json();
 
         const cookieFieldsList = document.createElement("ul");
@@ -80,12 +87,12 @@
     };
 
     const handleLogout = async () => {
-      await fetch("/api/logout");
+      await fetch(api.logout);
       handleGetProfile();
     };
 
     const switchRole = async () => {
-      await fetch("/api/switch-role");
+      await fetch(api.switchRole);
       handleGetProfile();
     };
 
