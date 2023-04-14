@@ -12,22 +12,27 @@ import {
 import { AuthService } from './auth.service';
 import { LoginDto } from './login.dto';
 import { LocalGuard } from './guards/local.guard';
+import { Public } from './decorators/public.decorator';
+import { Request } from 'express';
 
 @Controller('api/auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
   @UseGuards(LocalGuard)
+  @Public()
   @Post('login')
   loginUser(@Req() req, @Body() user: LoginDto) {
-    console.log('The body of login: ', user);
-    return req.session;
+    return req.user;
   }
 
-  @Get()
+  @Get('logout')
   @HttpCode(HttpStatus.OK)
-  logout(@Session() session) {
-    session.user = null;
+  logout(@Req() req: Request) {
+    req.logOut((err) => {
+      console.log(err);
+    });
+
     return;
   }
 }

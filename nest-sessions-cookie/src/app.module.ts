@@ -17,8 +17,10 @@ import * as RedisStore from 'connect-redis';
 import * as passport from 'passport';
 import { APP_GUARD } from '@nestjs/core';
 import { LoggedInGuard } from './auth/guards/logged-in.guard';
-import { Response } from 'express';
 import { AppController } from './app.controller';
+
+const getSeconds = (s) => s * 1000;
+const getMinutes = (m) => getSeconds(m * 60);
 
 @Module({
   imports: [AuthModule, UsersModule, RedisModule],
@@ -48,10 +50,11 @@ export class AppModule implements NestModule {
           saveUninitialized: false,
           secret: 'sup3rs3cr3t',
           resave: false,
+
           cookie: {
             sameSite: true,
             httpOnly: false,
-            maxAge: 60000,
+            maxAge: getSeconds(10),
           },
         }),
         passport.initialize(),

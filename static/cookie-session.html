@@ -58,7 +58,7 @@
     const handleGetProfile = async () => {
       try {
         const res = await fetch(api.getProfile);
-        const { cookie, user } = await res.json();
+        const { cookie, user = {} } = await res.json();
 
         const cookieFieldsList = document.createElement("ul");
 

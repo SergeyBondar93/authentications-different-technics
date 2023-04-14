@@ -12,11 +12,13 @@ export class LocalStrategy extends PassportStrategy(Strategy, 'local') {
   }
 
   async validate(email: string, password: string) {
+    // this method uses by passport to find a user and pass to session
     console.log(
       'Local strategy validate method params email/pass: ',
       email,
       password,
     );
-    return this.authService.validateUser({ email, password });
+    const user = await this.authService.validateUser({ email, password });
+    return user;
   }
 }

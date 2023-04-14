@@ -8,7 +8,9 @@ export class UsersController {
 
   @Get('me/profile')
   getMeProfile(@Req() req) {
-    return req.session;
+    const cookie = req.session.cookie;
+    const user = req.user;
+    return { cookie, user };
   }
 
   @Get('me/switch-role')
