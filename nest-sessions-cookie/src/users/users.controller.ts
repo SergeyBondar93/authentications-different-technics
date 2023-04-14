@@ -15,7 +15,7 @@ export class UsersController {
 
   @Get('me/switch-role')
   switchRole(@Req() req) {
-    const user = this.usersService.switchRole(req.session.user.id);
+    const user = this.usersService.switchRole(req.user.id);
     return user;
   }
 

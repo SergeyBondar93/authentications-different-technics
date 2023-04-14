@@ -7,9 +7,8 @@ import { roles } from 'src/users/users.service';
 export class AdminGuard extends LoggedInGuard {
   canActivate(context: ExecutionContext): boolean {
     const req = context.switchToHttp().getRequest();
-    return (
-      super.canActivate(context) &&
-      req.session.passport.user.role === roles.ADMIN
-    );
+    console.log('!!!ADMIN GIARD', req.user.roles);
+
+    return super.canActivate(context) && req.user.roles.includes(roles.ADMIN);
   }
 }
