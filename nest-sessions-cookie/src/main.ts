@@ -11,25 +11,10 @@ const getHours = (h) => getMinutes(h * 60);
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  app.setGlobalPrefix('api');
-  // app.use(cookieParser(COOKIE_SECRET_KEY));
-
-  app.use(
-    session({
-      // store by default is memory cache. not for production
-      // cuz it is not scalable
-      secret: COOKIE_SECRET_KEY,
-      resave: false,
-      saveUninitialized: false,
-      name: 'sessionIdNestCookie', // remove nest for prod
-      cookie: {
-        secure: false, // true for prod with https
-        httpOnly: true, // every time is true
-        maxAge: getSeconds(30),
-        sameSite: 'lax',
-      },
-    }),
-  );
+  app.enableCors({
+    origin: ['http://localhost:3000'],
+    credentials: true,
+  });
 
   await app.listen(3000);
 }
