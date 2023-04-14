@@ -6,9 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Cookie Session page</title>
   </head>
+
+  <style>
+    .active-user {
+      background: coral;
+    }
+  </style>
+
   <body>
-    <button id="login-admin">Login as ADMIN</button>
-    <button id="login-acc-manager">Login as ACC MANAGER</button>
+    <button id="user-1-login" class="user-button">
+      Login as USER 1 <b class="role"></b>
+    </button>
+    <button id="user-2-login" class="user-button">
+      Login as USER 2 <b class="role"></b>
+    </button>
     <button id="render-profile">Get Profile</button>
     <button id="switch-role">Switch Role and get the user again</button>
     <button id="logout">Logout</button>
@@ -22,9 +33,9 @@
   </body>
 
   <script>
-    const loginAdmin = document.querySelector("#login-admin");
+    const loginUser1 = document.querySelector("#user-1-login");
+    const loginUser2 = document.querySelector("#user-2-login");
     const logout = document.querySelector("#logout");
-    const loginAccManager = document.querySelector("#login-acc-manager");
     const renderProfile = document.querySelector("#render-profile");
     const cookieBlock = document.getElementById("cookie");
     const userBlock = document.getElementById("cookie");
@@ -40,16 +51,26 @@
       getAllUsers: "/api/users/all",
     };
 
-    const adminCreds = {
+    const user1Creds = {
       email: "user1@productioncoder.com",
       password: "user1pw",
     };
-    const accManager = {
+    const user2Manager = {
       email: "user2@productioncoder.com",
       password: "user2pw",
     };
 
-    const handleLogin = (creds) => async () => {
+    const handleLogin = (creds, btn) => async () => {
+      [...document.querySelectorAll(".active-user")].forEach((elem) => {
+        elem.classList.toggle("active-user");
+      });
+
+      [...document.querySelectorAll(".user-button")].forEach((elem) => {
+        elem.querySelector(".role").innerHTML = "";
+      });
+
+      btn.classList.toggle("active-user");
+
       const body = JSON.stringify(creds);
       const res = await fetch(api.login, {
         method: "POST",
@@ -139,8 +160,8 @@
       }
     };
 
-    loginAdmin.addEventListener("click", handleLogin(adminCreds));
-    loginAccManager.addEventListener("click", handleLogin(accManager));
+    loginUser1.addEventListener("click", handleLogin(user1Creds, loginUser1));
+    loginUser2.addEventListener("click", handleLogin(user2Manager, loginUser2));
 
     renderProfile.addEventListener("click", handleGetProfile);
     switchRoleBtn.addEventListener("click", switchRole);

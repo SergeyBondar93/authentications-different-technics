@@ -22,4 +22,14 @@ async function switchRole(req, res) {
   }
 }
 
-module.exports = { profile, switchRole };
+async function getAllUsers(req, res) {
+  try {
+    const users = await userService.getAllUsers();
+    res.json(users);
+  } catch (error) {
+    console.error(err);
+    res.status(401).json(err);
+  }
+}
+
+module.exports = { profile, switchRole, getAllUsers };

@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const authenticate = require("../middleware/authenticate");
+const adminOnly = require("../middleware/adminOnly");
 const authController = require("../controller/auth");
 const profileController = require("../controller/profile");
 const logoutController = require("../controller/logout");
@@ -27,5 +28,8 @@ router.use(authenticate);
 
 router.get("/api/users/me/switch-role", profileController.switchRole);
 router.get("/api/users/me/profile", profileController.profile);
+
+router.use(adminOnly);
+router.get("/api/users/all", profileController.getAllUsers);
 
 module.exports = router;

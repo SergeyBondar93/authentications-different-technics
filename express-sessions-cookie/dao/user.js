@@ -31,4 +31,17 @@ async function findUserById(id) {
   return user ? user : Promise.reject("user not found");
 }
 
-module.exports = { findUserByEmail, findUserById, roles };
+async function getAllUsers() {
+  const formattedUsers = Object.entries(users).map(([email, user]) => {
+    const u = { ...user };
+    delete u.pwHash;
+    return {
+      ...u,
+      email,
+    };
+  });
+
+  return formattedUsers;
+}
+
+module.exports = { findUserByEmail, findUserById, roles, getAllUsers };

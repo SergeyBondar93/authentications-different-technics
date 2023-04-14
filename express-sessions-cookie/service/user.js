@@ -18,4 +18,8 @@ async function switchRole(id) {
   }
 }
 
-module.exports = { switchRole };
+async function getAllUsers() {
+  return await userDAO.getAllUsers();
+}
+
+module.exports = { switchRole, getAllUsers };
