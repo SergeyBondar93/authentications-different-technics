@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cookie Session page</title>
+  </head>
+  <body>
+    <button id="login-admin">Login as ADMIN</button>
+    <button id="login-acc-manager">Login as ACC MANAGER</button>
+    <button id="render-profile">Get Profile</button>
+    <button id="switch-role">Switch Role and get the user again</button>
+    <button id="logout">Logout</button>
+
+    <div id="profile">
+      <div id="cookie"></div>
+      <div id="user"></div>
+    </div>
+  </body>
+
+  <script>
+    const loginAdmin = document.querySelector("#login-admin");
+    const logout = document.querySelector("#logout");
+    const loginAccManager = document.querySelector("#login-acc-manager");
+    const renderProfile = document.querySelector("#render-profile");
+    const cookieBlock = document.getElementById("cookie");
+    const userBlock = document.getElementById("cookie");
+    const switchRoleBtn = document.getElementById("switch-role");
+
+    const adminCreds = {
+      email: "user1@productioncoder.com",
+      password: "user1pw",
+    };
+    const accManager = {
+      email: "user2@productioncoder.com",
+      password: "user2pw",
+    };
+
+    const handleLogin = (creds) => async () => {
+      const body = JSON.stringify(creds);
+      const res = await fetch("/api/login", {
+        method: "POST",
+        body,
+        headers: { "Content-Type": "application/json" },
+      });
+
+      handleGetProfile();
+    };
+
+    const handleGetProfile = async () => {
+      try {
+        const res = await fetch("/api/profile");
+        const { cookie, user } = await res.json();
+
+        const cookieFieldsList = document.createElement("ul");
+
+        Object.entries(cookie).forEach(([key, value]) => {
+          const b = document.createElement("li");
+          b.innerHTML = `<b>${key}</b>  ${value}`;
+          cookieFieldsList.append(b);
+        });
+
+        const userFieldsList = document.createElement("ul");
+
+        Object.entries(user).forEach(([key, value]) => {
+          const b = document.createElement("li");
+          b.innerHTML = `<b>${key}</b>  ${value}`;
+          userFieldsList.append(b);
+        });
+
+        cookieBlock.innerHTML = "";
+        userBlock.innerHTML = "";
+
+        cookieBlock.append(cookieFieldsList);
+        userBlock.append(userFieldsList);
+      } catch (error) {
+        cookieBlock.innerHTML = "You are not authorised";
+      }
+    };
+
+    const handleLogout = async () => {
+      await fetch("/api/logout");
+      handleGetProfile();
+    };
+
+    const switchRole = async () => {
+      await fetch("/api/switch-role");
+      handleGetProfile();
+    };
+
+    loginAdmin.addEventListener("click", handleLogin(adminCreds));
+    loginAccManager.addEventListener("click", handleLogin(accManager));
+
+    renderProfile.addEventListener("click", handleGetProfile);
+    switchRoleBtn.addEventListener("click", switchRole);
+    logout.addEventListener("click", handleLogout);
+
+    handleGetProfile();
+  </script>
+</html>
