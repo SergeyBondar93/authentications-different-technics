@@ -1,15 +1,20 @@
 import { Controller, Get, Req, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { Request } from 'express';
+import { AdminGuard } from 'src/auth/guards/admin.guard';
 
-@Controller('users')
+@Controller('api/users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get('me/profile')
   getMeProfile(@Req() req: Request) {
-    const cookie = { jwt: req.headers['Authentication'] };
+    const cookie = { jwt: req.headers['authorization'] };
     const user = (req as any).user;
+
+    delete user.hashedRt;
+    delete user.pwHash;
+
     return { cookie, user };
   }
 
@@ -24,16 +29,4 @@ export class UsersController {
     const user = this.usersService.switchRole(req.user.id);
     return user;
   }
-
-  // @Put('update')
-  // async updateCurrentUser(
-  //   @Body() updateUserDto: Record<string, any>,
-  //   @Request() req,
-  // ) {
-  //   const user = await this.usersService.update(
-  //     req.user.username,
-  //     updateUserDto,
-  //   );
-  //   return user;
-  // }
 }

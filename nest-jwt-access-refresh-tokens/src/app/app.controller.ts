@@ -9,7 +9,7 @@ const index = path.resolve(
   '..',
   '..',
   'static',
-  'cookie-session.html',
+  'jwt-refresh.html',
 );
 
 @Controller('')

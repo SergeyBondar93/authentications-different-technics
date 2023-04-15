@@ -25,13 +25,11 @@ export class AuthService {
     const [access_token, refresh_token] = await Promise.all([
       await this.jwtService.signAsync(payload, {
         secret: 'at-secret',
-        // secret: this.configService.get<string>('ACCESS_TOKEN__SECRET'),
-        expiresIn: 1000,
+        expiresIn: '3s',
       }),
       await this.jwtService.signAsync(payload, {
         secret: 'rt-secret',
-        // secret: this.configService.get<string>('REFRESH_TOKEN_SECRET'),
-        expiresIn: 3000,
+        expiresIn: '10s',
       }),
     ]);
     return { access_token, refresh_token };
@@ -58,7 +56,7 @@ export class AuthService {
       );
     }
 
-    const isRightPassword = bcrypt.compare(authDto.password, user.hash);
+    const isRightPassword = bcrypt.compare(authDto.password, user.pwHash);
 
     if (!isRightPassword) {
       throw new UnauthorizedException(

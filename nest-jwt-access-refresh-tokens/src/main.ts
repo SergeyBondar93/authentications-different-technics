@@ -8,6 +8,8 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
 
-  await app.listen(3333);
+  await app.listen(3333, () => {
+    console.log('Server is running on http://localhost:3333');
+  });
 }
 bootstrap();

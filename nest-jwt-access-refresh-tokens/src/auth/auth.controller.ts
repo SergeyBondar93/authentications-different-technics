@@ -16,7 +16,7 @@ import { RtGuard } from './guards/rt.guard';
 import { GetCurrentUserId } from '../common/decorators/current.user.id.decorator';
 import { GetCurrentUser } from '../common/decorators/current.user.decorator';
 
-@Controller('auth')
+@Controller('api/auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
   @Public()
@@ -28,7 +28,7 @@ export class AuthController {
   }
 
   @Public()
-  @Post('local/signin')
+  @Post('login')
   @HttpCode(HttpStatus.OK)
   signinLocal(@Body() authDto: AuthDto): Promise<Tokens> {
     return this.authService.signinLocal(authDto);

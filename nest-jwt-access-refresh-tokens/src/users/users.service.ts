@@ -36,7 +36,7 @@ export class UsersService {
   // prisma orm interface
   async update({ where, data }) {
     const findFn = where.id ? this.findUserById : this.findUserByEmail;
-    const user = await findFn(where.id || where.email);
+    const user = await findFn.call(this, where.id || where.email);
 
     Object.assign(user, data);
   }
