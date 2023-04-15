@@ -18,15 +18,16 @@ export class UsersController {
     return { cookie, user };
   }
 
+  @Get('me/switch-role')
+  switchRole(@Req() req) {
+    const user = this.usersService.switchRole(req.user.id);
+
+    return user;
+  }
+
   @Get('all')
   @UseGuards(AdminGuard)
   getAll() {
     return this.usersService.getAll();
-  }
-
-  @Get('me/switch-role')
-  switchRole(@Req() req) {
-    const user = this.usersService.switchRole(req.user.id);
-    return user;
   }
 }
