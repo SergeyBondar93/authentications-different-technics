@@ -1,0 +1,31 @@
+import { Module } from '@nestjs/common';
+import { AuthService } from './auth.service';
+import { AuthController } from './auth.controller';
+
+import { JwtModule } from '@nestjs/jwt';
+import { AtStrategy } from './strategies/at.strategy';
+import { RtStrategy } from './strategies/rt.strategy';
+import { APP_GUARD } from '@nestjs/core';
+import { AtGuard } from './guards/at.guard';
+import { UsersModule } from 'src/users/users.module';
+
+@Module({
+  imports: [
+    //  prettier-ignore
+    UsersModule,
+    // RolesModule,
+    JwtModule.register({}),
+  ],
+  providers: [
+    AuthService,
+    AtStrategy,
+    RtStrategy,
+    {
+      provide: APP_GUARD,
+      useClass: AtGuard,
+    },
+  ],
+  controllers: [AuthController],
+  exports: [AuthService],
+})
+export class AuthModule {}
