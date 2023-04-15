@@ -29,7 +29,7 @@ export class AuthService {
       }),
       await this.jwtService.signAsync(payload, {
         secret: 'rt-secret',
-        expiresIn: '10s',
+        expiresIn: '60s',
       }),
     ]);
     return { access_token, refresh_token };
